@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎲 D&D AI Dungeon Master</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+</head>
+<body>
+    <!-- Session Picker Overlay -->
+    <div id="session-picker" class="session-overlay">
+        <div class="session-picker-content">
+            <h2>Your Adventures</h2>
+            <div id="session-list"></div>
+            <button onclick="createNewSession()" class="btn-new-session">New Adventure</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-row">
+                <div>
+                    <h1>🎲 D&D AI Dungeon Master V2</h1>
+                    <p class="subtitle">Two-Stage Retrieval | Tool-Based Rules | GPT-4o</p>
+                </div>
+                <button id="change-session-btn" class="btn-session" onclick="changeSession()" style="display:none;">Change Session</button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Left Panel: Chat -->
+            <div class="chat-panel">
+                <div class="chat-header">
+                    <h2>💬 Adventure Log</h2>
+                    <button onclick="clearChat()" class="btn-small">Clear</button>
+                </div>
+                <div id="chat-messages" class="chat-messages"></div>
+                <div class="chat-input-container">
+                    <input type="text" id="message-input" placeholder="Type your action or command..." autocomplete="off">
+                    <button onclick="sendMessage()" class="btn-send">Send</button>
+                </div>
+                <div class="quick-commands">
+                    <button onclick="insertCommand('/help')" class="btn-cmd">/help</button>
+                    <button onclick="insertCommand('/roll 1d20')" class="btn-cmd">Roll d20</button>
+                    <button onclick="insertCommand('/next')" class="btn-cmd">Next Turn</button>
+                </div>
+            </div>
+
+            <!-- Right Panel: Stats & Info -->
+            <div class="info-panel">
+                <!-- Spatial Map -->
+                <div class="card">
+                    <h3>🗺️ Map</h3>
+                    <div id="spatial-map-container">
+                        <canvas id="spatial-map"></canvas>
+                        <div id="map-info"></div>
+                    </div>
+                </div>
+
+                <!-- Stats -->
+                <div class="card">
+                    <h3>📊 Stats</h3>
+                    <div id="stats-content">
+                        <div id="characters-list"></div>
+                        <div id="monsters-list"></div>
+                    </div>
+                </div>
+
+                <!-- Combat Tracker -->
+                <div class="card">
+                    <h3>⚔️ Combat</h3>
+                    <div id="combat-status">Not in combat</div>
+                    <div id="initiative-order"></div>
+                </div>
+
+                <!-- Dice Log -->
+                <div class="card">
+                    <h3>🎲 Dice Rolls</h3>
+                    <div id="dice-log"></div>
+                </div>
+
+                <!-- Cache Stats -->
+                <div class="card card-small">
+                    <div id="cache-stats"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/grid_map.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

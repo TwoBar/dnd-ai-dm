@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Sheet</title>
+    <link rel="stylesheet" href="/static/css/character_sheet.css">
+</head>
+<body>
+    <!-- Character Sheet Modal Overlay -->
+    <div id="characterSheetModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <!-- Header -->
+            <div class="sheet-header">
+                <h2 id="characterName">Character Sheet</h2>
+                <button class="close-btn" onclick="closeCharacterSheet()">&times;</button>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="tab-nav">
+                <button class="tab-btn active" onclick="switchTab('core')">Core Stats</button>
+                <button class="tab-btn" onclick="switchTab('combat')">Combat & Equipment</button>
+                <button class="tab-btn" onclick="switchTab('spells')">Spells & Features</button>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <!-- Tab 1: Core Stats -->
+                <div id="coreTab" class="tab-pane active">
+                    <div class="stat-grid">
+                        <!-- Basic Info -->
+                        <div class="stat-block full-width">
+                            <h3 id="characterTitle">Level 1 Fighter</h3>
+                        </div>
+
+                        <!-- Health & Defense -->
+                        <div class="stat-block">
+                            <label>Hit Points</label>
+                            <div class="stat-value large" id="hpDisplay">10 / 10</div>
+                            <div class="stat-bar">
+                                <div class="stat-bar-fill" id="hpBar" style="width: 100%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="stat-block">
+                            <label>Armor Class</label>
+                            <div class="stat-value large" id="acDisplay">16</div>
+                        </div>
+
+                        <div class="stat-block">
+                            <label>Initiative</label>
+                            <div class="stat-value large" id="initiativeDisplay">+2</div>
+                        </div>
+
+                        <div class="stat-block">
+                            <label>Proficiency Bonus</label>
+                            <div class="stat-value large" id="proficiencyDisplay">+2</div>
+                        </div>
+
+                        <!-- Ability Scores -->
+                        <div class="stat-block full-width">
+                            <h4>Ability Scores</h4>
+                            <div class="ability-grid">
+                                <div class="ability">
+                                    <div class="ability-name">STR</div>
+                                    <div class="ability-score" id="strScore">10</div>
+                                    <div class="ability-mod" id="strMod">+0</div>
+                                </div>
+                                <div class="ability">
+                                    <div class="ability-name">DEX</div>
+                                    <div class="ability-score" id="dexScore">14</div>
+                                    <div class="ability-mod" id="dexMod">+2</div>
+                                </div>
+                                <div class="ability">
+                                    <div class="ability-name">CON</div>
+                                    <div class="ability-score" id="conScore">12</div>
+                                    <div class="ability-mod" id="conMod">+1</div>
+                                </div>
+                                <div class="ability">
+                                    <div class="ability-name">INT</div>
+                                    <div class="ability-score" id="intScore">10</div>
+                                    <div class="ability-mod" id="intMod">+0</div>
+                                </div>
+                                <div class="ability">
+                                    <div class="ability-name">WIS</div>
+                                    <div class="ability-score" id="wisScore">13</div>
+                                    <div class="ability-mod" id="wisMod">+1</div>
+                                </div>
+                                <div class="ability">
+                                    <div class="ability-name">CHA</div>
+                                    <div class="ability-score" id="chaScore">8</div>
+                                    <div class="ability-mod" id="chaMod">-1</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Active Conditions -->
+                        <div class="stat-block full-width">
+                            <h4>Active Conditions</h4>
+                            <div id="conditionsList" class="conditions-list">
+                                <span class="no-data">No active conditions</span>
+                            </div>
+                        </div>
+
+                        <!-- Proficiencies -->
+                        <div class="stat-block full-width">
+                            <h4>Proficiencies</h4>
+                            <div id="proficienciesList" class="proficiencies-list">
+                                <span class="no-data">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Combat & Equipment -->
+                <div id="combatTab" class="tab-pane">
+                    <div class="stat-grid">
+                        <!-- Combat Stats -->
+                        <div class="stat-block">
+                            <label>Spell Save DC</label>
+                            <div class="stat-value large clickable" id="spellSaveDC" onclick="showModifierBreakdown('spell_save_dc')">--</div>
+                            <small class="stat-hint">Click for breakdown</small>
+                        </div>
+
+                        <div class="stat-block">
+                            <label>Spell Attack</label>
+                            <div class="stat-value large clickable" id="spellAttack" onclick="showModifierBreakdown('spell_attack_bonus')">--</div>
+                            <small class="stat-hint">Click for breakdown</small>
+                        </div>
+
+                        <div class="stat-block">
+                            <label>Melee Attack</label>
+                            <div class="stat-value large clickable" id="meleeAttack" onclick="showModifierBreakdown('melee_attack_bonus')">--</div>
+                            <small class="stat-hint">Click for breakdown</small>
+                        </div>
+
+                        <div class="stat-block">
+                            <label>Ranged Attack</label>
+                            <div class="stat-value large clickable" id="rangedAttack" onclick="showModifierBreakdown('ranged_attack_bonus')">--</div>
+                            <small class="stat-hint">Click for breakdown</small>
+                        </div>
+
+                        <!-- Equipment -->
+                        <div class="stat-block full-width">
+                            <h4>Equipped Items</h4>
+                            <div id="equippedItems" class="item-list">
+                                <span class="no-data">No equipped items</span>
+                            </div>
+                        </div>
+
+                        <!-- Inventory -->
+                        <div class="stat-block full-width">
+                            <h4>Inventory</h4>
+                            <div id="inventoryList" class="item-list">
+                                <span class="no-data">Empty inventory</span>
+                            </div>
+                        </div>
+
+                        <!-- Currency -->
+                        <div class="stat-block full-width">
+                            <h4>Currency</h4>
+                            <div id="currency" class="currency-display">
+                                <span><strong>CP:</strong> <span id="copper">0</span></span>
+                                <span><strong>SP:</strong> <span id="silver">0</span></span>
+                                <span><strong>EP:</strong> <span id="electrum">0</span></span>
+                                <span><strong>GP:</strong> <span id="gold">0</span></span>
+                                <span><strong>PP:</strong> <span id="platinum">0</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 3: Spells & Features -->
+                <div id="spellsTab" class="tab-pane">
+                    <div class="stat-grid">
+                        <!-- Spell Slots -->
+                        <div class="stat-block full-width">
+                            <h4>Spell Slots</h4>
+                            <div id="spellSlots" class="spell-slots">
+                                <span class="no-data">No spell slots</span>
+                            </div>
+                        </div>
+
+                        <!-- Cantrips -->
+                        <div class="stat-block full-width">
+                            <h4>Cantrips</h4>
+                            <div id="cantripsList" class="spell-list">
+                                <span class="no-data">No cantrips</span>
+                            </div>
+                        </div>
+
+                        <!-- Spells by Level -->
+                        <div class="stat-block full-width">
+                            <h4>Spells</h4>
+                            <div id="spellsList" class="spell-list">
+                                <span class="no-data">No spells known</span>
+                            </div>
+                        </div>
+
+                        <!-- Class Features -->
+                        <div class="stat-block full-width">
+                            <h4>Class Features</h4>
+                            <div id="featuresList" class="features-list">
+                                <span class="no-data">No class features</span>
+                            </div>
+                        </div>
+
+                        <!-- Resources -->
+                        <div class="stat-block full-width">
+                            <h4>Class Resources</h4>
+                            <div id="resourcesList" class="resources-list">
+                                <span class="no-data">No class resources</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modifier Breakdown Modal -->
+    <div id="modifierBreakdownModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content small">
+            <div class="sheet-header">
+                <h3 id="breakdownTitle">Modifier Breakdown</h3>
+                <button class="close-btn" onclick="closeModifierBreakdown()">&times;</button>
+            </div>
+            <div id="breakdownContent" class="breakdown-content">
+                Loading...
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/character_sheet.js"></script>
+</body>
+</html>

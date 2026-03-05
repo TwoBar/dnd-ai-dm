@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.env
+*.db
+.venv/
+venv/
+.DS_Store
+vector_dbs/
+data/reference.db
+data/game_state.db
